@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart To-Do List</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Smart To-Do List with Progress Tracker</h1>
+        
+        <!-- Task Input -->
+        <form action="{{ url_for('add_task') }}" method="POST">
+            <input type="text" name="task" placeholder="Enter a new task" required>
+            <button type="submit">Add Task</button>
+        </form>
+
+        <!-- Task List -->
+        <div id="tasks">
+            {% for task in tasks %}
+                <div class="task">
+                    <span class="{{ 'done' if task.done else '' }}">{{ task.text }}</span>
+                    <a href="{{ url_for('toggle_done', index=loop.index0) }}">Toggle</a>
+                </div>
+            {% endfor %}
+        </div>
+
+        <p>Completed: {{ tasks|selectattr('done', 'equalto', true)|list|length }}/{{ tasks|length }} tasks</p>
+        <a href="{{ url_for('clear_tasks') }}">Clear All Tasks</a>
+    </div>
+</body>
+</html>
